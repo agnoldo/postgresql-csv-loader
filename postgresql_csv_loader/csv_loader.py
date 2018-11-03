@@ -43,7 +43,7 @@ class CsvLoader(object):
         self._table_prefix = table_prefix
 
     def load_data(self, file_path, delimiter=DEFAULT_DELIMITER, quote_char=DEFAULT_QUOTE_CHAR,
-                  escape_char=DEFAULT_ESCAPE_CHAR, create_table=True, encoding="utf-8"):
+                  escape_char=DEFAULT_ESCAPE_CHAR, create_table=True, create_indices=False, encoding="utf-8"):
         """
         Loads data from CSV file to the database.
 
@@ -52,13 +52,17 @@ class CsvLoader(object):
         - special characters are replaced with underscore.
         Table name is specified based on CSV file name.
 
-        :param file_path: path to a CSV file
+        :param file_path: path to a single CSV file, a ZIP file containing one or many CSV files or 
+        even a path to many CSV files using mask wildcards like ? and *
         :param delimiter: a one-character string used to separate fields. It defaults to ','
         :param quote_char: a one-character string used to quote fields containing special characters,
         such as the delimiter or quotechar, or which contain new-line characters
         :param escape_char: a one-character string used by the writer to escape the delimiter
         :param create_table: if True, table will be created
+        :param create_indices: if True, one index will be created for each column
         :param encoding file encoding
+        :param re_pattern Pattern parameter for regular expression sub that will be called on table and column names
+        :param re_repl Repl parameter for regular expression sub that will be called on table and column names
         """
         # doublequote=True by default
         # don't define escape char if it's the same as quote char
